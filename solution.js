@@ -1,12 +1,7 @@
-// #####
-// #  #
-// ##
-// # #
-// #   #
+
 const axios = require('axios')
 const dotenv =require('dotenv')
 const moment = require('moment')
-const util = require('util');
 
 dotenv.config()
 var url = process.env.url
@@ -138,17 +133,18 @@ axios.get(url).then((response) =>{
     // console.log(Invitations)
 //  Let's POST the Invitation
 
-    // axios.post(post_url, {
-    //     data: JSON.stringify(Invitations),
-    //     headers: {
-    //         'Content-type': 'application/json'
-    //     }
-    // }).then((res)=>{
-    //     console.log(res.response.data)
-    // }).catch((err)=>{
-    //     console.log(err.response.data)
-    // })
+axios.post(post_url, {
+        data: JSON.stringify(Invitations),
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((res)=>{
+        console.log(res.response.data)
+    }).catch((err)=>{
+        console.log(err.response.data)
+    })
 
 }).catch((error)=>{
     console.log(error)
 })
+

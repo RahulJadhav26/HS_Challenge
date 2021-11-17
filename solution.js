@@ -70,7 +70,7 @@ axios.get(url).then((response) =>{
     // console.log(payload)
 
 
-    // two dates structure event_payload
+    // two consecutive dates  event_payload created
     for(var country in payload){
         if(payload.hasOwnProperty(country)){
             for(var obj_index in payload[country]){              
@@ -82,7 +82,7 @@ axios.get(url).then((response) =>{
                            payload[country][obj_index - 1].date
                        ],
                        attendeesCount : attendees.size,
-                       attendees: attendees
+                       attendees: Array.from(attendees)
                    })
                }
             }
@@ -130,7 +130,7 @@ axios.get(url).then((response) =>{
             }
         }
     }
-    // console.log(Invitations)
+    console.log(Invitations)
 //  Let's POST the Invitation
 
 axios.post(post_url, {

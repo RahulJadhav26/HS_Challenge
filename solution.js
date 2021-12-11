@@ -8,17 +8,17 @@ dotenv.config()
 var url = process.env.url
 var post_url = process.env.post_url
 axios.get(url).then((response) =>{
-    const raw_data = response.data
-    const partners =  raw_data.partners
 
     // Variables Declaration
     var country_availablity = {}
     var payload = {}
     var event_payload = {}
-    var Invitations = {
+    var invitations = {
         countries: []
     }
     let newAvailableDates
+    const raw_data = response.data
+    const partners =  raw_data.partners
 
     partners.forEach((partner)=>{
         const availableDates = partner.availableDates
@@ -34,7 +34,7 @@ axios.get(url).then((response) =>{
         newAvailableDates = availableDates.filter((currentDate, key, arr)=>{
             return moment(currentDate).diff(moment(arr[key + 1]), 'days') === -1 || moment(currentDate).diff(moment(arr[key - 1]), 'days') === 1 
         })
-        
+
         newAvailableDates.forEach((date) =>{
             if(country_availablity[country][date]){
                 country_availablity[country][date].attendees.push(email)
@@ -69,7 +69,7 @@ axios.get(url).then((response) =>{
             });
         }
     }
-
+console.log(payload)
 
 
     // two consecutive dates  event_payload created
@@ -116,7 +116,7 @@ axios.get(url).then((response) =>{
 
     for( var country in event_payload){
         if(event_payload.hasOwnProperty(country)){
-                Invitations['countries'].push({
+                invitations['countries'].push({
                     attendeeCount: event_payload[country][0].attendeeCount,
                     attendees: event_payload[country][0].attendees,
                     name: country,
@@ -125,19 +125,19 @@ axios.get(url).then((response) =>{
         }
     }
 
-console.log(Invitations)
+// console.log(Invitations)
 //  Let's POST the Invitation
 
-axios.post(post_url, {
-        data: JSON.stringify(Invitations),
-        headers: {
-            'Content-type': 'application/json'
-        }
-    }).then((res)=>{
-        console.log(res.response.data)
-    }).catch((err)=>{
-        console.log(err.response.data)
-    })
+// axios.post(post_url, {
+//         data: JSON.stringify(Invitations),
+//         headers: {
+//             'Content-type': 'application/json'
+//         }
+//     }).then((res)=>{
+//         console.log(res.response.data)
+//     }).catch((err)=>{
+//         console.log(err.response.data)
+//     })
 
 }).catch((error)=>{
     console.log(error)

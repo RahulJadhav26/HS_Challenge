@@ -77,7 +77,9 @@ axios.get(url).then((response)=>{
         console.error(error);
     });
 
-})
+}).catch((error) => {
+    console.error(error);
+});
 
 
     // Formating the map to desired payload

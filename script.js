@@ -9,9 +9,46 @@ var post_url = process.env.post_url
 const map = new Map();
 let sessionsByUser = {}
 
+//  The solution is working for the below Test Case
+var test = {
+    "events": [
+         {
+             "url": "/pages/a-big-river",
+             "visitorId": "d1177368-2310-11e8-9e2a-9b860a0d9039",
+             "timestamp": 1512754583000
+         },
+         {
+             "url": "/pages/a-small-dog",
+             "visitorId": "d1177368-2310-11e8-9e2a-9b860a0d9039",
+             "timestamp": 1512754631000
+         },
+        {
+            "url": "/pages/a-big-talk",
+            "visitorId": "f877b96c-9969-4abc-bbe2-54b17d030f8b",
+            "timestamp": 1512709065294
+        },
+        {
+            "url": "/pages/a-sad-story",
+            "visitorId": "f877b96c-9969-4abc-bbe2-54b17d030f8b",
+            "timestamp": 1512711000000
+        },
+        {
+            "url": "/pages/a-big-river",
+            "visitorId": "d1177368-2310-11e8-9e2a-9b860a0d9039",
+            "timestamp": 1512754436000
+        },
+        {
+            "url": "/pages/a-sad-story",
+            "visitorId": "f877b96c-9969-4abc-bbe2-54b17d030f8b",
+            "timestamp": 1512709024000
+        }
+    ]
+}
+
 // GET API for fetching events
 axios.get(url).then((response)=>{
     var data = response.data
+    // var events = test.events
     var events = data.events
 
     //Creating a map of {id => pages}
@@ -28,17 +65,21 @@ axios.get(url).then((response)=>{
         const sessions = fetchSessions(timestamps, url);
         sessionsByUser[user] = sessions;
     })
+
+    // Result is consoled here
+    // console.log(sessionsByUser)
     
+
     // POST API
-    console.log(sessionsByUser)
-    axios.post("https://candidate.hubteam.com/candidateTest/v3/problem/result?userKey=08c477ddccfeb6646a6b3011163a",
-    sessionsByUser).then((response) => {
+    axios.post(post_url,sessionsByUser).then((response) => {
         console.log(response.body);
     }).catch((error) => {
         console.error(error);
     });
 
 })
+
+
     // Formating the map to desired payload
 function fetchSessions(timestamps, url) {
     let start = 0;
@@ -56,7 +97,8 @@ function fetchSessions(timestamps, url) {
         if (timestamps[i] - timestamps[start] < 600000) {
             let session = sessions[sessions.length - 1];
         
-            //  calculate the duration of session 
+            //  calculate the duration of session by subtracting the consecutive timestamp with 
+            // the start timestamp. 
             session.duration = timestamps[i] - timestamps[start];
             session.pages.push(url.get(timestamps[i]));
         } else {
